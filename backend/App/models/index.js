@@ -9,6 +9,6 @@ module.exports = {
     productReview : require("./productReviews"),
     product: require("./products"),
     address: require("./shippingAddresses"),
-    user: require("./user.model"),
+    user: require("./user.models"),
     wishlist: require("./Wishlists"),
 };
