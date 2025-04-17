@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(cors());
+
 app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 require('./App/routes')(app);
