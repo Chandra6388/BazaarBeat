@@ -6,6 +6,11 @@ const User = db.user;
 
  
 
+
+
+
+
+
 // Login CLASS
 class Auth {
 
@@ -18,9 +23,6 @@ class Auth {
         if(!password) {
             return res.status(400).json({ message: "Password is required" });
         }
-
-
-
  
     }
 

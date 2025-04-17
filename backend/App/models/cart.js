@@ -23,4 +23,5 @@ const cartModel = Schema({
     timestamps: true
 });
 const cart = model('carts', cartModel);
+
 export default cart;
