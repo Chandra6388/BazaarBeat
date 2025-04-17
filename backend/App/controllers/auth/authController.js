@@ -4,25 +4,39 @@ const jwt = require("jsonwebtoken");
 const db = require('../../models');
 const User = db.user;
 
- 
-
-
-
-
-
-
-// Login CLASS
 class Auth {
 
     // Login User
     async login(req, res) {
         const { email, password } = req.body;
         if(!email) {
-            return res.status(400).json({ message: "Email is required" });
+            return res.send({ message: "Email is required" });
         }
         if(!password) {
-            return res.status(400).json({ message: "Password is required" });
+            return res.send({ message: "Password is required" });
         }
+
+        
+        const user = await User.find({ email: email });
+        if (!user) {
+            return res.send({ message: "User not found" });
+        }
+        const isMatch = await bcrypt.compare(password, user[0].password);
+        if (!isMatch) {
+            return res.send({ message: "Invalid credentials" });
+        }
+        
+        const token = jwt.sign({ id: user[0]._id }, process.env.SECRET, { expiresIn: "1h" });
+        const { password: _, ...userWithoutPassword } = user[0].toObject();
+
+      
+        return res.status(200).json({
+            message: "Login successful  ",
+            user: userWithoutPassword,
+            token: token,
+            expiresIn: 3600
+        });
+
  
     }
 
@@ -39,7 +53,7 @@ class Auth {
         };
         const user = await User.findOne(existingUser);
         if (user) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.send({ message: "User already exists" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
