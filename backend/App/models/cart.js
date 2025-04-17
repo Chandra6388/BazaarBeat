@@ -6,11 +6,14 @@ const cartModel = Schema({
         ref: 'users',
         required: true
     },
+
+    
     product_id: {
         type: Schema.Types.ObjectId,
         ref: 'products',
         required: true
     },
+
     quantity: {
         type: Number,
         required: true
