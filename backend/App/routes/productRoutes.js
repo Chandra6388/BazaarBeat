@@ -3,8 +3,9 @@ const { deleteProduct, updateProduct, getProductById, getAllProducts, addProduct
 
 router.post("/add-product", addProduct);
 router.post("/get-all-products", getAllProducts);
-router.post("/get-product", getProductById);
+router.post("/get-product-byId", getProductById);
 router.post("/update-product", updateProduct);
+router.post("/delete-product", deleteProduct);
 
 
 module.exports = router;
