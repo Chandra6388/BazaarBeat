@@ -40,6 +40,8 @@ class Auth {
  
     }
 
+    
+
     async register(req, res) {
         const { fullname , username, email, password, phone } = req.body;
 
