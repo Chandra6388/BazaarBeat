@@ -50,7 +50,6 @@ class ProductController {
         }
     }
 
-    
     async getProductById(req, res) {
         const { id } = req.body;
 
