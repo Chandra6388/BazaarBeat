@@ -51,7 +51,7 @@ class ProductController {
     }
 
     async getProductById(req, res) {
-        const { id } = req.params;
+        const { id } = req.body;
 
         try {
             const product = await Product.findById(id).populate("category_id", "name");
@@ -65,8 +65,7 @@ class ProductController {
     }
 
     async updateProduct(req, res) {
-        const { id } = req.params;
-        const { name, description, price, categoryId, image_url, stock } = req.body;
+        const {id,  name, description, price, categoryId, image_url } = req.body;
 
         try {
             const product = await Product.findById(id);
@@ -81,7 +80,7 @@ class ProductController {
                     description,
                     price,
                     image_url,
-                    stock,
+                    
                     category_id: categoryId
                 },
                 { new: true }
@@ -94,7 +93,7 @@ class ProductController {
     }
 
     async deleteProduct(req, res) {
-        const { id } = req.params;
+        const { id } = req.body;
 
         try {
             const product = await Product.findById(id);

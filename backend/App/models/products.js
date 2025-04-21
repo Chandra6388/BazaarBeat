@@ -1,50 +1,21 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const productSchema = new Schema(
+const productSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    category_id: {
-      type: Schema.Types.ObjectId,
-      ref: "categories",
-      required: true,
-    },
-    stock: {
-      type: Number,
-      required: true,
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    reviews: {
-      type: Number,
-      default: 0,
-    },
-    status: {
-      type: String,
-      enum: ["active", "inactive"],
-      default: "active",
-    },
-    image_url: {
-      type: String,
-      default: null,
-    },
-  },
-  {
-    timestamps: true, // automatically adds createdAt and updatedAt
-  }
-);
+    
+      name: { type: String, required: true, },
+      description: { type: String, required: true, },
+      price: { type: Number, required: true, },
+      category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true, },
+      stock: { type: Number, required: true, default : 0, },
+      rating: { type: Number, default: 0, },
+      reviews: { type: Number, default: 0, },
+      status: { type: String, enum: ["active", "inactive"], default: "active", },
+      image_url: { type: String, default: null, },
+    
+}, 
+{
+  timestamps: true
+});
+module.exports = mongoose.model("Products", productSchema);
 
-const Product = model("products", productSchema);
-export default Product;
