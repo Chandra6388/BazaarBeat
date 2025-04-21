@@ -96,6 +96,7 @@ class ProductController {
         const { id } = req.body;
 
         
+
         try {
             const product = await Product.findById(id);
             if (!product) {
