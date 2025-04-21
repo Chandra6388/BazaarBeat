@@ -101,6 +101,7 @@ class ProductController {
                 return res.send({ status: false, data: [], message: "Product not found" });
             }
 
+            
             await Product.findByIdAndDelete(id);
             return res.send({ status: true, data: [], message: "Product deleted successfully" });
         } catch (error) {
