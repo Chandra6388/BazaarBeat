@@ -107,6 +107,7 @@ class ProductController {
             return res.status(500).json({ status: false, message: "Error deleting product", error: error.message });
         }
     }
+
     
 }
 module.exports = new ProductController();
