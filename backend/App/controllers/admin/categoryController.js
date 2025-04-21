@@ -1,64 +1,84 @@
+
 const db = require("../../models");
-const category = db.category;
+const CategoryDb = db.category;
 
 class CategoryController {
-
     async addCategory(req, res) {
         const { name } = req.body;
-        
+
         if (!name) {
             return res.send({ status: false, data: [], message: "Category name is required" });
         }
 
-        const newCategory = new category({ name });
-
-        
-        await newCategory.save();
-        return res.send({ status: true, message: "Category added successfully", data: newCategory });
+        try {
+            const newCategory = new CategoryDb({ name });
+            await newCategory.save();
+            return res.send({ status: true, message: "Category added successfully", data: newCategory });
+        } catch (error) {
+            return res.status(500).send({ status: false, message: "Error adding category", error: error.message });
+        }
     }
 
-
     async getAllCategory(req, res) {
-        const categories = await Category.find().sort({ createdAt: -1 });
-        if (categories.length === 0) {
-            return res.send({ status: false, data: [], message: "No categories found" });
+        try {
+            const categories = await CategoryDb.find().sort({ createdAt: -1 });
+            if (categories.length === 0) {
+                return res.send({ status: false, data: [], message: "No categories found" });
+            }
+            return res.send({ status: true, data: categories, message: "Categories fetched successfully" });
+        } catch (error) {
+            return res.status(500).send({ status: false, message: "Error fetching categories", error: error.message });
         }
-        return res.send({ status: true, data: categories, message: "Categories fetched successfully" });
     }
 
     async getCategoryById(req, res) {
         const { id } = req.params;
-        const category = await Category.findById(id);
-        if (!category) {
-            return res.send({ status: false, data: [], message: "Category not found" });
+        try {
+            const category = await CategoryDb.findOne(id);
+            if (!category) {
+                return res.send({ status: false, data: [], message: "Category not found" });
+            }
+            return res.send({ status: true, data: category, message: "Category fetched successfully" });
+        } catch (error) {
+            return res.status(500).send({ status: false, message: "Error fetching category", error: error.message });
         }
-        return res.send({ status: true, data: category, message: "Category fetched successfully" });
     }
 
     async updateCategory(req, res) {
         const { id, name } = req.body;
+
         if (!name) {
             return res.send({ status: false, data: [], message: "Category name is required" });
         }
-        const category = await Category.findById(id);
-        if (!category) {
-            return res.send({ status: false, data: [], message: "Category not found" });
-        }
-        const updatedCategory = await Category.findByIdAndUpdate(id, { name }, { new: true });
-        return res.send({ status: true, data: updatedCategory, message: "Category updated successfully" });
 
+        try {
+            const category = await CategoryDb.findById(id);
+            if (!category) {
+                return res.send({ status: false, data: [], message: "Category not found" });
+            }
+
+            const updatedCategory = await CategoryDb.findByIdAndUpdate(id, { name }, { new: true });
+            return res.send({ status: true, data: updatedCategory, message: "Category updated successfully" });
+        } catch (error) {
+            return res.status(500).send({ status: false, message: "Error updating category", error: error.message });
+        }
     }
 
     async deleteCategory(req, res) {
         const { id } = req.body;
-        const category = await Category.findById(id);
-        if (!category) {
-            return res.send({ status: false, data: [], message: "Category not found" });
-        }
-        await Category.findByIdAndDelete(id);
-        return res.send({ status: true, data: [], message: "Category deleted successfully" });
-    }
 
+        try {
+            const category = await CategoryDb.findById(id);
+            if (!category) {
+                return res.send({ status: false, data: [], message: "Category not found" });
+            }
+
+            await CategoryDb.findByIdAndDelete(id);
+            return res.send({ status: true, data: [], message: "Category deleted successfully" });
+        } catch (error) {
+            return res.status(500).send({ status: false, message: "Error deleting category", error: error.message });
+        }
+    }
 }
 
 module.exports = new CategoryController();

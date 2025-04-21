@@ -1,93 +1,113 @@
 const db = require("../../models");
+const CategoryDb = db.category;
 const Product = db.product;
-const Category = db.category;
 
 class ProductController {
-
     async addProduct(req, res) {
         const { name, description, price, categoryId, image_url } = req.body;
-        if (!name) {
-            return res.send({ status: false, data: [], message: "Product name is required" });
-        }
-        if (!description) {
-            return res.send({ status: false, data: [], message: "Product description is required" });
-        }
-        if (!price) {
-            return res.send({ status: false, data: [], message: "Product price is required" });
-        }
-        if (!categoryId) {
-            return res.send({ status: false, data: [], message: "Product category is required" });
+
+        if (!name || !description || !price || !categoryId ) {
+            return res.send({ status: false, data: [], message: "All fields are required" });
         }
 
-        const category = await Category.findById(categoryId);
-        if (!category) {
-            return res.status(404).json({ message: "Category not found" });
+        try {
+            const category = await CategoryDb.findById(categoryId);
+            if (!category) {
+                return res.status(404).json({ status: false, message: "Category not found" });
+            }
+
+            const newProduct = new Product({
+                name,
+                description,
+                price,
+                image_url,
+                category_id: categoryId
+            });
+
+            await newProduct.save();
+            return res.send({ status: true, message: "Product added successfully", data: newProduct });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error adding product", error: error.message });
         }
-
-        const newProduct = new Product({
-            name,
-            description,
-            price,
-            image_url,
-            category: categoryId
-        });
-
-        await newProduct.save();
-        return res.send({ status: true, message: "Product added successfully", data: newProduct });
     }
 
     async getAllProducts(req, res) {
         const { categoryId } = req.query;
-        const query = categoryId ? { category: categoryId } : {};
-        const products = await Product.find(query).populate("category", "name").sort({ createdAt: -1 });
-        if (products.length === 0) {
-            return res.send({ status: false, data: [], message: "No products found" });
-        }
-        return res.send({ status: true, data: products, message: "Products fetched successfully" });
+        const query = categoryId ? { category_id: categoryId } : {};
 
+        try {
+            const products = await Product.find(query)
+                .populate("category_id", "name")
+                .sort({ createdAt: -1 });
+
+            if (products.length === 0) {
+                return res.send({ status: false, data: [], message: "No products found" });
+            }
+
+            return res.send({ status: true, data: products, message: "Products fetched successfully" });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error fetching products", error: error.message });
+        }
     }
 
     async getProductById(req, res) {
         const { id } = req.params;
-        const product = await Product.findById(id).populate("category", "name");
-        if (!product) {
-            return res.send({ status: false, data: [], message: "Product not found" });
-        }
-        return res.send({ status: true, data: product, message: "Product fetched successfully" });
 
+        try {
+            const product = await Product.findById(id).populate("category_id", "name");
+            if (!product) {
+                return res.send({ status: false, data: [], message: "Product not found" });
+            }
+            return res.send({ status: true, data: product, message: "Product fetched successfully" });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error fetching product", error: error.message });
+        }
     }
 
     async updateProduct(req, res) {
         const { id } = req.params;
-        const { name, description, price, categoryId, image_url } = req.body;
-        const product = await Product.findById(id);
-        if (!product) {
-            return res.send({ status: false, data: [], message: "Product not found" });
+        const { name, description, price, categoryId, image_url, stock } = req.body;
+
+        try {
+            const product = await Product.findById(id);
+            if (!product) {
+                return res.send({ status: false, data: [], message: "Product not found" });
+            }
+
+            const updatedProduct = await Product.findByIdAndUpdate(
+                id,
+                {
+                    name,
+                    description,
+                    price,
+                    image_url,
+                    stock,
+                    category_id: categoryId
+                },
+                { new: true }
+            );
+
+            return res.send({ status: true, data: updatedProduct, message: "Product updated successfully" });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error updating product", error: error.message });
         }
-        // use other method to update the product
-        const updatedProduct = await Product.findByIdAndUpdate(id, {
-            name,
-            description,
-            price,
-            image_url,
-            category: categoryId
-        }, { new: true });
-        if (!updatedProduct) {
-            return res.send({ status: false, data: [], message: "Product not updated" });
-        }
-        return res.send({ status: true, data: updatedProduct, message: "Product updated successfully" });
     }
 
     async deleteProduct(req, res) {
         const { id } = req.params;
-        const product = await Product.findById(id);
-        if (!product) {
-            return res.send({ status: false, data: [], message: "Product not found" });
+
+        try {
+            const product = await Product.findById(id);
+            if (!product) {
+                return res.send({ status: false, data: [], message: "Product not found" });
+            }
+
+            await Product.findByIdAndDelete(id);
+            return res.send({ status: true, data: [], message: "Product deleted successfully" });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error deleting product", error: error.message });
         }
-        await Product.findByIdAndDelete(id);
-        return res.send({ status: true, data: [], message: "Product deleted successfully" });
     }
-
 }
-
 module.exports = new ProductController();
+

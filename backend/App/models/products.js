@@ -1,55 +1,50 @@
-import { Schema , model } from "mongoose";
+import { Schema, model } from "mongoose";
 
-const productModel = Schema({
+const productSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true 
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true 
+      type: String,
+      required: true,
     },
     price: {
-        type: Number,
-        required: true 
+      type: Number,
+      required: true,
     },
     category_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'categories',
+      type: Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
     },
     stock: {
-        type: Number,
-        required: true 
+      type: Number,
+      required: true,
     },
     rating: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     reviews: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     status: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
     },
     image_url: {
-        type: String,
-        default: null
+      type: String,
+      default: null,
     },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
-    }
-},
-{
-    timestamps: true
-});
+  },
+  {
+    timestamps: true, // automatically adds createdAt and updatedAt
+  }
+);
 
-const product = model('products', productModel);
-export default product;
+const Product = model("products", productSchema);
+export default Product;

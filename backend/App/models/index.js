@@ -11,5 +11,5 @@ module.exports = {
     address: require("./shippingAddresses"),
     user: require("./user.models"),
     wishlist: require("./Wishlists"),
-    
+
 };
