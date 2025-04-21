@@ -48,8 +48,7 @@ class ProductController {
         } catch (error) {
             return res.status(500).json({ status: false, message: "Error fetching products", error: error.message });
         }
-    }
-    
+    } 
 
     async getProductById(req, res) {
         const { id } = req.body;
