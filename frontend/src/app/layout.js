@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Topheader from "@/components/topHeader"
+import Header from "@/components/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,8 @@ export default function RootLayout({ children }) {
         <link href="css/style.css" rel="stylesheet" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Topheader/>
+        <Header/>
         {children}
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
