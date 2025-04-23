@@ -135,7 +135,8 @@ const page = () => {
                         <div id="header-carousel" className="carousel slide" data-ride="carousel">
                             <div className="carousel-inner">
                                 <div className="carousel-item active" style={{ height: 410 }}>
-                                    <img className="img-fluid" src="img/carousel-1.jpg" alt="Image" />
+                                    <img className="img-fluid" src="assets/img/product-2.jpg" alt="Image" loading="lazy" />
+                                    
                                     <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                         <div className="p-3" style={{ maxWidth: 700 }}>
                                             <h4 className="text-light text-uppercase font-weight-medium mb-3">
