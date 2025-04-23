@@ -2,6 +2,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Topheader from "../components/topHeader/page"
 import Header from "@/components/header/page";
+import Future from "@/components/future/page";
+import Category from "@/components/category/page";
+import Offer from "@/components/Offer/page";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +36,10 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Topheader/>
         <Header/>
+        <Future/>
+        <Category/>
+        <Offer/>
+
         {children}
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
