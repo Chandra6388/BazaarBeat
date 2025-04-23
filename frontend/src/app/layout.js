@@ -5,6 +5,12 @@ import Header from "@/components/header/page";
 import Future from "@/components/future/page";
 import Category from "@/components/category/page";
 import Offer from "@/components/Offer/page";
+import TrandyProduct from "@/components/TrandyProduct/page";
+import NewProduct from "@/components/newProduct/page";
+import Subscribe from "@/components/Subscribe/page";
+import Footer from "@/components/Footer/page";
+
+
 
 
 const geistSans = Geist({
@@ -39,8 +45,13 @@ export default function RootLayout({ children }) {
         <Future/>
         <Category/>
         <Offer/>
+        <TrandyProduct/>
+        <Subscribe/>
+        <NewProduct/>
 
+        <Footer/>
         {children}
+
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
