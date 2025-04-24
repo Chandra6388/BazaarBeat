@@ -1,14 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Topheader from "../components/topHeader/page"
-import Header from "@/components/header/page";
-import Future from "@/components/future/page";
-import Category from "@/components/category/page";
-import Offer from "@/components/Offer/page";
-import TrandyProduct from "@/components/TrandyProduct/page";
-import NewProduct from "@/components/newProduct/page";
-import Subscribe from "@/components/Subscribe/page";
-import Footer from "@/components/Footer/page";
 
 
 
@@ -40,16 +31,7 @@ export default function RootLayout({ children }) {
         <link href="css/style.css" rel="stylesheet" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Topheader/>
-        <Header/>
-        <Future/>
-        <Category/>
-        <Offer/>
-        <TrandyProduct/>
-        <Subscribe/>
-        <NewProduct/>
-
-        <Footer/>
+      
         {children}
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
