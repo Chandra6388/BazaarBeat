@@ -4,9 +4,8 @@ const page = () => {
     return (
     
 
-       
         
-        
+
         <div>
             <div className="container-fluid mb-5">
                 <div className="row border-top px-xl-5">
