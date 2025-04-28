@@ -46,6 +46,8 @@ const Page = () => {
                                     Shopper
                                 </h1>
                             </Link>
+
+
                             
                         
                             <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
