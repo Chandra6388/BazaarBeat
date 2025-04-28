@@ -47,15 +47,6 @@ const Page = () => {
                                 </h1>
                             </Link>
 
-
-
-
-
-
-
-
-
-
                             <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                                 <span className="navbar-toggler-icon" />
                             </button>
