@@ -46,13 +46,14 @@ const Page = () => {
                                     Shopper
                                 </h1>
                             </Link>
+                           
                             <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                                 <span className="navbar-toggler-icon" />
                             </button>
                             <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div className="navbar-nav mr-auto py-0">
                                     <Link href="/" className="nav-item nav-link active">Home</Link>
-                                    <Link href="/" className="nav-item nav-link">Shop</Link>
+                                    <Link href="/shop" className="nav-item nav-link">Shop</Link>
                                     <Link href="/" className="nav-item nav-link">Shop Detail</Link>
 
                                     <div className="nav-item dropdown">
