@@ -46,9 +46,9 @@ const HeaderSlider = () => {
   return (
     <div className="overflow-hidden relative w-full">
       <div
-        className="flex transition-transform duration-700 ease-in-out"
+        className="flex transition-transform duration-700 ease-in-out  pt-12"
         style={{
-          transform: `translateX(-${currentSlide * 100}%)`,
+          transform: `translateX(-${currentSlide * 100}%)`, 
         }}
       >
         {sliderData.map((slide, index) => (
