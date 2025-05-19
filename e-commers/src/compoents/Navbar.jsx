@@ -17,7 +17,6 @@ const Navbar = () => {
       const parsedData = JSON.parse(storedUserData);
       setUserData(parsedData);
     }
-
     if (cart) {
       setCartCount(cart.length);
     }
