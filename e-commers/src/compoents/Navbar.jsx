@@ -69,7 +69,7 @@ const Navbar = () => {
       <ul className="hidden md:flex items-center gap-4">
         <Image className="w-4 h-4" src={assets.search_icon} alt="search icon" />
         {handleProfile() == "Login" ?
-          <button className="border px-3 rounded-[5px] flex items-center gap-2 hover:text-gray-900 transition">
+          <button className="border px-3 rounded-[5px] flex items-center gap-2 hover:text-gray-900 transition" onClick={() => router.push('/login')}>
             {handleProfile()}
           </button>
           :
