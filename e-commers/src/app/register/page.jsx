@@ -13,7 +13,6 @@ const Register = () => {
         role: 'USER'
     });
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUserData({
