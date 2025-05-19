@@ -41,7 +41,7 @@ class Auth {
     }
 
     async register(req, res) {
-        const { fullname , username, email, password, phone } = req.body;
+        const { fullname , username, email, password, phone , role} = req.body;
         const existingUser = {
             $or : [
                 { email: email },
@@ -60,7 +60,8 @@ class Auth {
             username,
             email,
             password: hashedPassword,
-            phone
+            phone,
+            role: role || "USER",
         });
 
         try {

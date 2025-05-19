@@ -1,16 +1,18 @@
 'use client'
 import React, { useState } from 'react';
+import { register } from '@/service/authService';
+import Swal from 'sweetalert2';
 
 const Register = () => {
+    const [errors, setErrors] = useState({});
     const [userData, setUserData] = useState({
         username: '',
         phone: '',
         email: '',
         password: '',
-        type: 'USER'
+        role: 'USER'
     });
 
-    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,33 +20,84 @@ const Register = () => {
             ...userData,
             [name]: value
         });
+        validate(name, value);
     };
 
-    const validate = () => {
-        const newErrors = {};
-        if (!userData.username) newErrors.username = 'Username is required';
-        if (!userData.phone) newErrors.phone = 'Phone number is required';
-        if (!userData.email) newErrors.email = 'Email is required';
-        if (!userData.password) newErrors.password = 'Password is required';
-        return newErrors;
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
+    const validate = (name, value) => {
+        const newErrors = { ...errors };
+        if (!value) {
+            newErrors[name] = `${name} is required`;
         } else {
-            console.log('Form submitted:', userData);
-            setErrors({});
+            delete newErrors[name];
+            setErrors((prevErrors) => {
+                const updatedErrors = { ...prevErrors };
+                delete updatedErrors[name];
+                return updatedErrors;
+            });
+        }
+        if (Object.keys(newErrors).length !== 0) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                ...newErrors,
+            }));
+        }
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateAllFields = () => {
+        let isValid = true;
+        for (const key in userData) {
+            if (!validate(key, userData[key])) {
+                isValid = false;
+            }
+        }
+        return isValid;
+    };
+
+    const handleSubmit = async (e) => {
+
+        const isValid1 = validateAllFields();
+        if (!isValid1) {
+            return;
+        }
+        try {
+            const req = {
+                username: userData.username,
+                phone: userData.phone,
+                email: userData.email,
+                password: userData.password,
+                role: userData.role
+            }
+            await register(req)
+                .then((res) => {
+                    if (res.status) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Registration Successful',
+                            text: res.message,
+                        })
+                        localStorage.setItem('user', JSON.stringify(res.data));
+                        window.location.href = '/login';
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Registration Failed',
+                            text: res.message,
+                        })
+                    }
+                })
+        } catch (error) {
+            console.log("error in registering user", error);
         }
     };
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Username</label>
                         <input
@@ -95,14 +148,13 @@ const Register = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Type</label>
-                        <select name="type" onChange={handleChange} className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="role" onChange={handleChange} className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="USER">User</option>
-                            <option value="ADMIN">Admin</option>
+                            <option value="SELLER">Seller</option>
                         </select>
                     </div>
-
-                    <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Register</button>
-                </form>
+                    <button className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition" onClick={handleSubmit}>Register</button>
+                </div>
             </div>
         </div>
     );
