@@ -6,9 +6,6 @@ export default function Login() {
     password: '',
   });
   const [errors, setErrors] = useState({});
-
-
-  console.log("errors", errors);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({
@@ -21,8 +18,6 @@ export default function Login() {
    
     const newErrors = { ...errors };
     if (!value) {
-       console.log("name", name);
-    console.log("value", value);
       newErrors[name] = `${name} is required`;
     }
     else{
@@ -32,7 +27,6 @@ export default function Login() {
         delete updatedErrors[name];
         return updatedErrors;
       });
-
     }
 
     if (Object.keys(newErrors).length !== 0) {
@@ -47,7 +41,6 @@ export default function Login() {
 
   };
   const validateAllFields = () => {
-    console.log("userData", userData);
     let isValid = true;
     for (const key in userData) {
       if (!validate(key, userData[key])) {
