@@ -5,8 +5,8 @@ import { useAppContext } from '@/context/AppContext';
 
 const ProductCard = ({ product }) => {
 
+    console.log("product", product);
     const { currency, router } = useAppContext()
-   
     return (
         <div
             onClick={() => { router.push('/product/' + product._id); scrollTo(0, 0) }}
