@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from 'react';
+import { login } from '@/service/authService';
+import Swal from 'sweetalert2';
 export default function Login() {
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-  });
+  const [userData, setUserData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({
@@ -14,13 +15,13 @@ export default function Login() {
     });
     validate(name, value);
   }
+
   const validate = (name, value) => {
-   
     const newErrors = { ...errors };
     if (!value) {
       newErrors[name] = `${name} is required`;
     }
-    else{
+    else {
       delete newErrors[name];
       setErrors((prevErrors) => {
         const updatedErrors = { ...prevErrors };
@@ -28,18 +29,15 @@ export default function Login() {
         return updatedErrors;
       });
     }
-
     if (Object.keys(newErrors).length !== 0) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         ...newErrors,
       }));
     }
-
     return Object.keys(newErrors).length === 0;
-
-
   };
+  
   const validateAllFields = () => {
     let isValid = true;
     for (const key in userData) {
@@ -49,10 +47,38 @@ export default function Login() {
     }
     return isValid;
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     const isValid1 = validateAllFields();
     if (!isValid1) {
       return;
+    }
+    try {
+      const req = {
+        email: userData.email,
+        password: userData.password,
+      }
+      await login(req)
+        .then((res) => {
+          if (res.status) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful',
+              text: res.message,
+            })
+            localStorage.setItem('user', JSON.stringify(res.data));
+            window.location.href = '/';
+          }
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Login Failed',
+              text: res.message,
+            })
+          }
+        })
+    } catch (error) {
+      console.log("error in login user", error);
     }
   };
 

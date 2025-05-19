@@ -10,28 +10,28 @@ class Auth {
     async login(req, res) {
         const { email, password } = req.body;
         if(!email) {
-            return res.send({ message: "Email is required" });
+            return res.send({status:false, message: "Email is required" });
         }
         if(!password) {
-            return res.send({ message: "Password is required" });
+            return res.send({status:false, message: "Password is required" });
         }
 
         
         const user = await User.find({ email: email });
         if (!user) {
-            return res.send({ message: "User not found" });
+            return res.send({ status: false,  message: "User not found" });
         }
         const isMatch = await bcrypt.compare(password, user[0].password);
         if (!isMatch) {
-            return res.send({ message: "Invalid credentials" });
+            return res.send({ status: false, message: "Invalid credentials" });
         }
         
         const token = jwt.sign({ id: user[0]._id }, process.env.SECRET, { expiresIn: "1h" });
         const { password: _, ...userWithoutPassword } = user[0].toObject();
 
-      
         return res.status(200).json({
-            message: "Login successful  ",
+            status: true,
+            message: "Login successful",
             user: userWithoutPassword,
             token: token,
             expiresIn: 3600
@@ -52,7 +52,7 @@ class Auth {
         };
         const user = await User.findOne(existingUser);
         if (user) {
-            return res.send({ message: "User already exists" });
+            return res.send({ status: false, message: "User already exists" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
@@ -65,9 +65,9 @@ class Auth {
 
         try {
             const savedUser = await newUser.save();
-            return res.status(201).json({ message: "User registered successfully", user: savedUser });
+            return res.send({ status: true, message: "User registered successfully", user: savedUser });
         } catch (error) {
-            return res.status(500).json({ message: "Error registering user", error });
+            return res.send({ message: "Error registering user", error });
         }
     }
 }
