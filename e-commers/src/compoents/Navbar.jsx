@@ -33,7 +33,6 @@ const Navbar = () => {
     }
   }
 
-  console.log("Role", handleProfile());
   return (
     <nav className="fixed top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 bg-white text-gray-700 z-50 shadow-md">
       <Image

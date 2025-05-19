@@ -2,10 +2,23 @@
 import React, { useState } from 'react';
 import { login } from '@/service/authService';
 import Swal from 'sweetalert2';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 export default function Login() {
   const [userData, setUserData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+ const router = useRouter();
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if(user){
+      console.log("user", user);
+      router.push('/')
+    }
+    else{
+      router.push('/login')
+    }
 
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
