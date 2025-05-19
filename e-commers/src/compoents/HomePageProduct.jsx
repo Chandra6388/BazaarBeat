@@ -4,6 +4,7 @@ import { useAppContext } from "@/context/AppContext";
 
 const HomeProducts = () => {
 
+  
   const { products, router } = useAppContext()
 
   return (
