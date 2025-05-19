@@ -10,8 +10,10 @@ const Navbar = () => {
   const [userData, setUserData] = useState(null);
   const [role, setRole] = useState("");
 
+
   useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
+    const storedUserData = localStorage.getItem("user");
+  
     if (storedUserData) {
       const parsedData = JSON.parse(storedUserData);
       setUserData(parsedData);

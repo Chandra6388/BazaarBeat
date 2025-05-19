@@ -79,7 +79,7 @@ export default function Login() {
               title: 'Login Successful',
               text: res.message,
             })
-            localStorage.setItem('user', JSON.stringify(res.data));
+            localStorage.setItem('user', JSON.stringify(res.user));
             window.location.href = '/';
           }
           else {
