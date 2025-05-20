@@ -4,6 +4,7 @@ import { login } from '@/service/authService';
 import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 export default function Login() {
   const [userData, setUserData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -80,6 +81,7 @@ export default function Login() {
               text: res.message,
             })
             localStorage.setItem('user', JSON.stringify(res.user));
+            Cookies.set('user', JSON.stringify(res.user), { expires: 7 });
             window.location.href = '/';
           }
           else {
