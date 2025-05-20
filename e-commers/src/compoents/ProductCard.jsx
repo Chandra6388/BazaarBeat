@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
 
     const { currency, router } = useAppContext()
     return (
-        <div onClick={() => { router.push('/product/' + product._id); scrollTo(0, 0) }}
+        <div onClick={() => { router.push('/user/product/' + product._id); scrollTo(0, 0) }}
             className="flex flex-col items-start gap-0.5 max-w-[200px] w-full cursor-pointer"
         >
             <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center">
