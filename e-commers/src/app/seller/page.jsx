@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from "react";
+import React, {useState , useEffect} from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
-import uploadToCloudinary  from "@/service/seller/UploadImg.service";
-import {getAllCategory} from "@/service/admin/categoryService";
+import uploadToCloudinary from "@/service/seller/UploadImg.service";
+import { getAllCategory } from "@/service/admin/categoryService";
 import axios from "axios";
 
 
@@ -16,6 +16,27 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  console.log("categories", categories);
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  const getCategory = async () => {
+    const req = {}
+    const res = await getAllCategory(req).then((res) => {
+      if (res.status) {
+        setCategories(res.data);
+      }
+      else {
+        setCategories([]);
+      }
+    })
+      .catch((err) => {
+        console.log("error in getting category", err);
+      });
+  }
 
   const handleSubmit = async () => {
     if (!name || !description || !price || !offerPrice || files.length === 0) {
@@ -42,7 +63,7 @@ const AddProduct = () => {
         images: filteredUrls,
       };
 
-    
+
       setFiles([]);
       setName('');
       setDescription('');
@@ -51,14 +72,7 @@ const AddProduct = () => {
       setOfferPrice('');
     } catch (error) {
       console.error("Upload error", error);
-      if (axios.isAxiosError(error)) {
-        console.log("Cloudinary error response:", error.response?.data);
-        alert(`Upload failed: ${error.response?.data?.error?.message || 'Unknown error'}`);
-      } else {
-        alert("Something went wrong!");
-      }
-    } finally {
-      setLoading(false);
+      
     }
   };
 
@@ -136,13 +150,11 @@ const AddProduct = () => {
               onChange={(e) => setCategory(e.target.value)}
               value={category}
             >
-              <option value="Earphone">Earphone</option>
-              <option value="Headphone">Headphone</option>
-              <option value="Watch">Watch</option>
-              <option value="Smartphone">Smartphone</option>
-              <option value="Laptop">Laptop</option>
-              <option value="Camera">Camera</option>
-              <option value="Accessories">Accessories</option>
+              {
+                categories.map((cat) => (
+                  <option key={cat._id} value={cat.name}>{cat.name}</option>
+                ))
+              }
             </select>
           </div>
           <div className="flex flex-col gap-1 w-32">

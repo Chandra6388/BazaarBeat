@@ -1,5 +1,5 @@
 import axios from "axios";
-import { base_url } from "../../Utils/config";
+import { base_url } from "../../../Utils/config";
 
 export const addCategory = async (data) => {
   try {
@@ -13,7 +13,7 @@ export const addCategory = async (data) => {
 
 export const getAllCategory = async (data) => {
   try {
-    const response = await axios.post(`${base_url}getAllCategory`, data);
+    const response = await axios.post(`${base_url}get-all-category`, data);
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
