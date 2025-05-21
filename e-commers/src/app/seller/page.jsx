@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import uploadToCloudinary from "@/service/seller/UploadImg.service";
 
 const AddProduct = () => {
-
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -12,14 +12,47 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  console.log("files", files);
 
+
+  const handleSubmit = async () => {
+
+    try {
+      const uploadedImageUrls = await Promise.all(
+        files.map(file => file ? uploadToCloudinary(file) : null)
+      );
+
+      console.log("Uploaded Image URLs: ", uploadedImageUrls);
+
+      return
+      // Ab tum yeh URLs backend pe bhej sakte ho ya state me store kar sakte ho
+      const productData = {
+        name,
+        description,
+        category,
+        price,
+        offerPrice,
+        images: uploadedImageUrls.filter(Boolean), // Remove null if any
+      };
+
+      console.log("Product Data to Send", productData);
+
+      // yahan API call karo if needed
+      // await fetch('/api/products', { method: 'POST', body: JSON.stringify(productData) })
+
+    } catch (error) {
+
+      console.error("Upload error", error);
+      if (axios.isAxiosError(error)) {
+        console.log("Cloudinary error response:", error.response?.data);
+
+      }
+    }
   };
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
-      <form onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
+      <div className="md:p-10 p-4 space-y-5 max-w-lg">
         <div>
           <p className="text-base font-medium">Product Image</p>
           <div className="flex flex-wrap items-center gap-3 mt-2">
@@ -124,10 +157,10 @@ const AddProduct = () => {
             />
           </div>
         </div>
-        <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
+        <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded" onClick={handleSubmit}>
           ADD
         </button>
-      </form>
+      </div>
       {/* <Footer /> */}
     </div>
   );
