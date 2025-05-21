@@ -4,9 +4,10 @@ const Product = db.product;
 
 class ProductController {
     async addProduct(req, res) {
-        const { name, description, price, categoryId, image_url } = req.body;
+        const { name, description, price, categoryId, image_url ,offer_price} = req.body;
 
-        if (!name || !description || !price || !categoryId ) {
+        console.log(req.body);
+        if (!name || !description || !price || !categoryId || !offer_price || image_url.length==0) {
             return res.send({ status: false, data: [], message: "All fields are required" });
         }
 
@@ -21,6 +22,7 @@ class ProductController {
                 description,
                 price,
                 image_url,
+                offer_price,
                 category_id: categoryId
             });
 
