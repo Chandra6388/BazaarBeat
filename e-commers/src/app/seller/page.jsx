@@ -1,82 +1,107 @@
 'use client';
-import React, {useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import uploadToCloudinary from "@/service/seller/UploadImg.service";
 import { getAllCategory } from "@/service/admin/categoryService";
-
-
-
+import { addProduct } from "@/service/admin/productsService";
+import Swal from "sweetalert2";
 
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Earphone');
-  const [price, setPrice] = useState('');
-  const [offerPrice, setOfferPrice] = useState('');
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    category: '',
+    price: '',
+    offerPrice: '',
+  });
 
-  console.log("categories", categories);
+
   useEffect(() => {
     getCategory();
   }, []);
 
   const getCategory = async () => {
     const req = {}
-    const res = await getAllCategory(req).then((res) => {
-      if (res.status) {
-        setCategories(res.data);
-      }
-      else {
-        setCategories([]);
-      }
-    })
+    const res = await getAllCategory(req)
+      .then((res) => {
+        if (res.status) {
+          setCategories(res.data);
+        }
+        else {
+          setCategories([]);
+        }
+      })
       .catch((err) => {
         console.log("error in getting category", err);
       });
   }
 
+  const resetFrom = () => {
+    setFiles([]);
+    setFormData({
+      name: '',
+      description: '',
+      category: '',
+      price: '',
+      offerPrice: '',
+    });
+  }
+
   const handleSubmit = async () => {
-    if (!name || !description || !price || !offerPrice || files.length === 0) {
-      alert("Please fill all required fields and upload at least one image.");
-      return;
-    }
-
+    setLoading(true);
     try {
-      setLoading(true);
-
-      // Upload images to Cloudinary
       const uploadedImageUrls = await Promise.all(
         files.map((file) => file ? uploadToCloudinary(file) : null)
       );
-
-      const filteredUrls = uploadedImageUrls.filter(Boolean);
-
-      const productData = {
-        name,
-        description,
-        category,
-        price,
-        offerPrice,
-        images: filteredUrls,
-      };
-
-
-      setFiles([]);
-      setName('');
-      setDescription('');
-      setCategory('Earphone');
-      setPrice('');
-      setOfferPrice('');
+      const req = {
+        name: formData.name,
+        description: formData.description,
+        categoryId: formData.category,
+        price: formData.price,
+        offer_price: formData.offerPrice,
+        image_url: uploadedImageUrls.filter(Boolean)
+      }
+      await addProduct(req)
+        .then((res) => {
+          if (res.status) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Product added successfully',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setLoading(false);
+            resetFrom();
+          }
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: res.message,
+            })
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.log("error in adding product", err);
+          setLoading(false);
+        })
     } catch (error) {
       console.error("Upload error", error);
-      
     }
   };
 
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <div className="md:p-10 p-4 space-y-5 max-w-lg">
@@ -116,13 +141,12 @@ const AddProduct = () => {
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-name">Product Name</label>
           <input
-            id="product-name"
+            name="name"
             type="text"
             placeholder="Type here"
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            required
+            onChange={handleChange}
+            value={formData.name}
           />
         </div>
 
@@ -130,13 +154,12 @@ const AddProduct = () => {
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-description">Product Description</label>
           <textarea
-            id="product-description"
+            name="description"
             rows={4}
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
             placeholder="Type here"
-            onChange={(e) => setDescription(e.target.value)}
-            value={description}
-            required
+            onChange={handleChange}
+            value={formData.description}
           ></textarea>
         </div>
 
@@ -145,14 +168,14 @@ const AddProduct = () => {
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="category">Category</label>
             <select
-              id="category"
+              name="category"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setCategory(e.target.value)}
-              value={category}
+              onChange={handleChange}
+              value={formData.category}
             >
               {
                 categories.map((cat) => (
-                  <option key={cat._id} value={cat.name}>{cat.name}</option>
+                  <option key={cat._id} value={cat._id}>{cat.name}</option>
                 ))
               }
             </select>
@@ -160,25 +183,25 @@ const AddProduct = () => {
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-price">Product Price</label>
             <input
-              id="product-price"
+              name="price"
               type="number"
               placeholder="0"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setPrice(e.target.value)}
-              value={price}
-              required
+              onChange={handleChange}
+              value={formData.price}
+             
             />
           </div>
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
             <input
-              id="offer-price"
+              name="offerPrice"
               type="number"
               placeholder="0"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setOfferPrice(e.target.value)}
-              value={offerPrice}
-              required
+              onChange={handleChange}
+              value={formData.offerPrice}
+             
             />
           </div>
         </div>

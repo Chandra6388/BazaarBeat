@@ -1,9 +1,9 @@
 import axios from "axios";
-import { base_url } from "../../Utils/config";
+import { base_url } from "../../../Utils/config";
 
 export const addProduct = async (data) => {
   try {
-    const response = await axios.post(`${base_url}addProduct`, data);
+    const response = await axios.post(`${base_url}add-product`, data);
     return response.data;
   } catch (error) {
     console.error("Error adding product:", error);
