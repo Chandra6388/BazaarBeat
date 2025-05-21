@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import uploadToCloudinary  from "@/service/seller/UploadImg.service";
+import {getAllCategory} from "@/service/admin/categoryService";
 import axios from "axios";
 
 const AddProduct = () => {
@@ -59,7 +60,7 @@ const AddProduct = () => {
     }
   };
 
-  
+
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <div className="md:p-10 p-4 space-y-5 max-w-lg">
