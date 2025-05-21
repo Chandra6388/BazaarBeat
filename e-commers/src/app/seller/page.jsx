@@ -4,7 +4,7 @@ import { assets } from "@/assets/assets";
 import Image from "next/image";
 import uploadToCloudinary from "@/service/seller/UploadImg.service";
 import { getAllCategory } from "@/service/admin/categoryService";
-import axios from "axios";
+
 
 
 
