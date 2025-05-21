@@ -6,6 +6,7 @@ import uploadToCloudinary  from "@/service/seller/UploadImg.service";
 import {getAllCategory} from "@/service/admin/categoryService";
 import axios from "axios";
 
+
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
