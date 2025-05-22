@@ -52,6 +52,29 @@ class ProductController {
         }
     } 
 
+    async getTopRatedProducts(req, res) {
+       
+        const {limit} = req.body
+
+        if(!limit) {
+            return res.send({ status: false, data: [], message: "Limit is required" });
+        }
+        try {
+            const products = await Product.find()
+                .sort({ rating: -1 })
+                .limit(limit)
+                .populate("category_id", "name");
+
+            if (products.length === 0) {
+                return res.send({ status: false, data: [], message: "No products found" });
+            }
+
+            return res.send({ status: true, data: products, message: "Top rated products fetched successfully" });
+        } catch (error) {
+            return res.status(500).json({ status: false, message: "Error fetching top rated products", error: error.message });
+        }
+    }
+
     async getProductById(req, res) {
         const { id } = req.body;
 
