@@ -12,6 +12,7 @@ const nextConfig = {
                 hostname: 'raw.githubusercontent.com',
                 pathname: '**',
             },
+            
         ],
     },
 };

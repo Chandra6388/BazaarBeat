@@ -1,12 +1,12 @@
 import axios from "axios";
-import { base_url } from "../../Utils/config";
+import { base_url } from "../../../Utils/config";
 
-export const login = async (user) => {
+export const getTopRatedProducts = async (user) => {
   try {
-    const response = await axios.post(`${base_url}login`, user);
+    const response = await axios.post(`${base_url}get-top-rated-products`, user);
     return response.data;
   } catch (error) {
-    console.error("Error logging in:", error);
+    console.error("Error fetching top rated products:", error);
     throw error;
   }
 };
