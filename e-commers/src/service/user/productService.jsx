@@ -1,9 +1,9 @@
 import axios from "axios";
 import { base_url } from "../../../Utils/config";
 
-export const getTopRatedProducts = async (user) => {
+export const getTopRatedProducts = async (data) => {
   try {
-    const response = await axios.post(`${base_url}get-top-rated-products`, user);
+    const response = await axios.post(`${base_url}get-top-rated-products`, data);
     return response.data;
   } catch (error) {
     console.error("Error fetching top rated products:", error);
@@ -11,9 +11,9 @@ export const getTopRatedProducts = async (user) => {
   }
 };
 
-export const register = async (user) => {
+export const getProductById = async (data) => {
   try {
-    const response = await axios.post(`${base_url}register`, user);
+    const response = await axios.post(`${base_url}get-product-byId`, data);
     return response.data;
   } catch (error) {
     console.error("Error registering:", error);

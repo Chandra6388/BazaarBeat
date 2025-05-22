@@ -6,8 +6,6 @@ import { getTopRatedProducts } from "@/service/user/productService";
 const HomeProducts = () => {
   const [getTopRatedProductsData, setGetTopRatedProductsData] = useState([]);
 
-  console.log("getTopRatedProductsData", getTopRatedProductsData)
-
   useEffect(() => {
     topProduct()
   }, [])
@@ -28,11 +26,7 @@ const HomeProducts = () => {
       })
   }
 
-
-  const { products, router } = useAppContext()
-
-
-
+  const { router } = useAppContext()
 
   return (
     <div className="flex flex-col items-center pt-14">
