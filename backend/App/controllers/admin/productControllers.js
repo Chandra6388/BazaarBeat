@@ -1,13 +1,15 @@
 const db = require("../../models");
 const CategoryDb = db.category;
 const Product = db.product;
+const addToCard = db.addToCard;
+
 
 class ProductController {
     async addProduct(req, res) {
-        const { name, description, price, categoryId, image_url ,offer_price} = req.body;
+        const { name, description, price, categoryId, image_url, offer_price } = req.body;
 
         console.log(req.body);
-        if (!name || !description || !price || !categoryId || !offer_price || image_url.length==0) {
+        if (!name || !description || !price || !categoryId || !offer_price || image_url.length == 0) {
             return res.send({ status: false, data: [], message: "All fields are required" });
         }
 
@@ -50,13 +52,13 @@ class ProductController {
         } catch (error) {
             return res.status(500).json({ status: false, message: "Error fetching products", error: error.message });
         }
-    } 
+    }
 
     async getTopRatedProducts(req, res) {
-       
-        const {limit} = req.body
 
-        if(!limit) {
+        const { limit } = req.body
+
+        if (!limit) {
             return res.send({ status: false, data: [], message: "Limit is required" });
         }
         try {
@@ -90,7 +92,7 @@ class ProductController {
     }
 
     async updateProduct(req, res) {
-        const {id,  name, description, price, categoryId, image_url } = req.body;
+        const { id, name, description, price, categoryId, image_url } = req.body;
 
         try {
             const product = await Product.findById(id);
@@ -105,7 +107,7 @@ class ProductController {
                     description,
                     price,
                     image_url,
-                    
+
                     category_id: categoryId
                 },
                 { new: true }
@@ -133,6 +135,31 @@ class ProductController {
         }
     }
 
+    async addToCart(req, res) {
+        const { userId, ProductId } = req.body
+
+        try {
+            if (!userId) {
+                return res.send({ status: false, message: "User Id is require" })
+            }
+            if (!ProductId) {
+                return res.send({ status: false, message: "Product Id is require" })
+            }
+
+            const newData = new addToCard({
+                userId,
+                ProductId
+            })
+
+            await newData.save()
+
+            return res.send({ status: true, message: "New product added  in cart", data: newData })
+        }
+        catch (error) {
+            return res.send({ status: false, message: "Internal server error", error: error.message })
+        }
+
+    }
 
 
 }
